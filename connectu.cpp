@@ -52,18 +52,20 @@ public:
 
     // Task: Add a new post to the FRONT of the list (O(1))
     void addPost(int pid, int uid, string content, int likes, long time) {
-        // TODO: LAB 1
-
-
+        Post* newNode = new Post(pid, uid, content, likes, time);
+        newNode->next = head;
+        head = newNode;
     }
 
-    void printTimeline() {
+    void printTimeline() {// Task: Traverse the linked list and print content
         Post* current = head;
         if (!current) { cout << "  (No posts yet)" << endl; return; }
-        
-        // Task: Traverse the linked list and print content
-        // TODO: LAB 1
 
+        Post* userPost = head;
+        while(userPost != NULL){
+            cout << userPost->content << " " << userPost->likes << " " << userPost->timestamp << endl;
+            userPost = userPost->next;
+        }
     }
 };
 
@@ -463,7 +465,7 @@ void showMainMenu() {
         else if (choice == 3) {
             // SAFETY: Commented out to prevent data loss on initial run.
             // Students must uncomment this ONLY when Lab 1 is complete.
-            // saveData(); 
+            saveData(); 
             cout << "Goodbye! " << endl;
         }
     }
