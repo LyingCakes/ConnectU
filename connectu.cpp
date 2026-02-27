@@ -163,8 +163,16 @@ private:
     HashNode** table;
 
     unsigned long hashFunction(string key) {
-        // TODO: LAB 2
-        return 0; 
+        int n = key.length();
+        int a = 31;
+        unsigned long hashed = 0;
+        int pPow = 1;
+
+        for (int i = 0; i < n; i++){
+            hashed = (hashed + (key[i] - 'a' + 1) * pPow) % TABLE_SIZE; //'a' normalizes ASCII value to 0-26
+            pPow = (pPow * a) % TABLE_SIZE;
+        }
+        return hashed;
     }
 
 public:
@@ -173,16 +181,45 @@ public:
         for (int i = 0; i < TABLE_SIZE; i++) table[i] = nullptr;
     }
 
-    void put(string key, User* user) { /* TODO: LAB 2 */ }
+    void put(string key, User* val) {
+        int index = hashFunction(key);
+
+        HashNode* current = table[index];
+        
+        if(table[index] == nullptr){
+            table[index] = new HashNode(key, val);
+            return;
+        }
+        
+        if(table[index] != nullptr){
+            while(current != nullptr){
+                if(current->key == key){ //updates in case of matching key
+                    current->value = val;
+                    return;
+                }
+                if (current->next == nullptr){ //reached the end
+                    break;
+                }
+                current = current->next;
+            }
+            current->next = new HashNode(key, val);
+        }
+        
+    }
 
     User* get(string key) {
-        // --- TEMPORARY FALLBACK FOR LAB 1 ---
-        for(User* u : allUsers) {
-            if (u->username == key) return u;
+        int index = hashFunction(key);
+        HashNode* current = table[index];
+
+        while (current != nullptr) {
+            if (current->key == key)
+                return current->value;
+            current = current->next;
         }
-        // TODO: LAB 2 - REPLACE ABOVE WITH HASH LOOKUP
-        return nullptr;
+
+        return nullptr;  // key not found
     }
+
 };
 
 UserMap userMap;
