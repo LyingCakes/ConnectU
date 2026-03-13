@@ -18,7 +18,8 @@ post_id,user_id,content,likes,timestamp
 9,8,Spent 4 hours debugging a missing semicolon. #333,754,1764561208
 15,9,Creative block is real today. #463,320,1764557608
 17,9,Sketching in the park. #171,692,1764554008
-20,9,Design is intelligence made visible. #463,1000,1764564808
+20,9,Design is intelligence made visible. #463,1001,1764564808
 3,10,Digital art is real art. #828,850,1764557608
 90022,11,hello world,0,1764777876
 90023,11,aaaa,0,1767070955
+90024,11,I am testing the functionality,0,1770942622
