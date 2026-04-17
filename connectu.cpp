@@ -347,7 +347,28 @@ void addFriendship(User* requester, User* target) {
 // TODO: LAB 5 - Breadth First Search
 void recommendFriends(User* startUser) {
     cout << "\n[GRAPH ANALYSIS] Finding friends of friends..." << endl;
-    // TODO: LAB 5
+    if (startUser == NULL) return;
+
+    queue<User*> q;
+    set<int> alreadyFri;
+
+    alreadyFri.insert(startUser->userId); //put friends ID as found
+    for (int x = 0; x < startUser->friends.size(); x++) {
+        q.push(startUser->friends[x]);
+        alreadyFri.insert(startUser->friends[x]->userId);
+    }
+
+    while (!q.empty()){
+        User* current = q.front();
+        q.pop();
+
+        for (User* x : current->friends){
+            if (alreadyFri.find(x->userId) == alreadyFri.end()){ //they did not find it
+                cout << x->username << endl;
+                alreadyFri.insert(x->userId); //we found them now
+            }
+        }
+    }
 }
 
 // ==========================================
