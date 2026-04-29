@@ -115,9 +115,16 @@ public:
         timeline.addPost(pid, userId, content, likes, time);
     }
 
-    void addFriend(User* u) {
-        friends.push_back(u);       
-        friendTree.addFriend(u);    
+    bool addFriend(User* u) {
+        auto check = find(friends.begin(), friends.end(), u);
+        if (check == friends.end()){ //if not friends, add them
+            friends.push_back(u);
+            friendTree.addFriend(u);
+            return true;    
+        
+        }else{ //already friends
+            return false;
+        }
     }
     
     vector<User*> getFriendsList() { return friends; }
@@ -340,8 +347,13 @@ void registerNewUser(string username, int tech, int art, int sport) {
 
 void addFriendship(User* requester, User* target) {
     requester->addFriend(target);
-    target->addFriend(requester);
-    cout << "\n[SUCCESS] You are now friends with @" << target->username << endl;
+    bool succeed = target->addFriend(requester);
+    if (succeed == true){
+        cout << "\n[SUCCESS] You are now friends with @" << target->username << endl;
+    }else{
+        cout << "\n[FAIL] You are already friends with @" << target->username << endl;
+    }
+    
 }
 
 // TODO: LAB 5 - Breadth First Search
@@ -550,18 +562,31 @@ void showUserDashboard(User* currentUser) {
         else if (choice == 7) {
             cout << "Logging out..." << endl;
         }
+        else{
+            cout << "\nPlease pick a valid option" << endl;
+        }
     }
 }
 
 void showMainMenu() {
-    int choice = 0;
+    float choice = 0; //changed for sanitization
     while (choice != 3) {
         cout << "\n=== CONNECT-U ===" << endl;
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
         cout << "3. Exit & Save" << endl;
         cout << "Select >> ";
-        cin >> choice;
+        
+        cin  >> choice;
+        choice = floor(choice); //forces it to be int
+
+        if (cin.fail()) { //input sanitation, cin must be integer
+            cout << "Invalid input! Expected an integer." << endl;
+            cin.clear(); //clear flags
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            choice = 0; //start over
+            continue;
+        }
 
         if (choice == 1) {
             string username;
@@ -582,6 +607,9 @@ void showMainMenu() {
             // Students must uncomment this ONLY when Lab 1 is complete.
             saveData(); 
             cout << "Goodbye! " << endl;
+        }
+        else{
+            cout << "\nPlease pick a valid option" << endl;
         }
     }
 }
