@@ -578,7 +578,7 @@ void showMainMenu() {
         cout << "Select >> ";
         
         cin  >> choice;
-        choice = floor(choice); //forces it to be int
+        choice = (int)choice; //truncates and prevents float shenanigans
 
         if (cin.fail()) { //input sanitation, cin must be integer
             cout << "Invalid input! Expected an integer." << endl;
